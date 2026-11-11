@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel 360 - Smart Hostel & Mess Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              800: '#075985',
+              900: '#0f2942',
+            },
+            accent: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased">
+
+  <!-- Top Institutional Bar -->
+  <header class="header-bar">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center font-black text-brand-900 text-xl shadow-md">
+          H360
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold tracking-tight text-white">Hostel 360</h1>
+            <span class="brand-badge">SRM University Delhi-NCR</span>
+          </div>
+          <p class="text-xs text-slate-300">Smart Hostel & Mess Management System · B.Tech CSE 7th Sem Live Project</p>
+        </div>
+      </div>
+
+      <!-- Live Meal Session Badge & Quick Actions -->
+      <div class="flex items-center gap-3">
+        <div id="live-session-pill" class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700 text-xs">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-300">Active Meal:</span>
+          <span id="header-meal-name" class="font-bold text-amber-400">Loading...</span>
+        </div>
+
+        <button onclick="openMLModal()" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          ML Food Forecast
+        </button>
+
+        <button onclick="openNoticesModal()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          Notices
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Role Switcher Strip -->
+  <div id="role-nav-strip" class="bg-slate-900 border-t border-slate-800 px-4 py-2 text-white">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div id="role-pills-container" class="flex items-center gap-1">
+        <span class="text-slate-400 font-medium mr-1">Switch Portal Role:</span>
+        <button onclick="switchRole('student')" id="btn-role-student" class="role-pill active">🎓 Student</button>
+        <button onclick="switchRole('warden')" id="btn-role-warden" class="role-pill">🛡️ Warden</button>
+        <button onclick="switchRole('mess_staff')" id="btn-role-mess" class="role-pill">🍽️ Mess Staff</button>
+        <button onclick="switchRole('maintenance_staff')" id="btn-role-maint" class="role-pill">🔧 Maintenance</button>
+        <button onclick="switchRole('admin')" id="btn-role-admin" class="role-pill">⚙️ Administrator</button>
+        <button onclick="switchRole('guardian')" id="btn-role-guardian" class="role-pill">👨‍👩‍👧 Guardian</button>
+      </div>
+      <div class="flex items-center gap-3 text-slate-300">
+        <div id="user-info-pill" class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Logged in: <strong id="logged-user-name" class="text-amber-400">Dhruv Bansal</strong> (<span id="logged-user-role">Student</span>)</span>
+        </div>
+        <button onclick="handleLogout()" id="btn-logout" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded font-semibold text-[11px] shadow transition flex items-center gap-1">
+          <span>🚪</span> Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Main Content App Root -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+    <div id="portal-content">
+      <!-- Injected via app.js -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-auto text-xs text-slate-500 text-center">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
+      <div>
+        <strong>Hostel 360</strong> · Department of Computer Science & Engineering, SRM University Delhi-NCR
+      </div>
+      <div>
+        Project Group: Dhruv Bansal (11023210138) · Arnav Ambasta (11023210146) · Janak Vallecha (11023210195)
+      </div>
+      <div>
+        Supervisor: Ms. Anju Goel
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL CONTAINER -->
+  <div id="modal-container" class="hidden"></div>
+
+  <!-- Core App Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
